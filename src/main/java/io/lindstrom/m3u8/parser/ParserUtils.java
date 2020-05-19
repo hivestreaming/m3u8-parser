@@ -78,7 +78,13 @@ class ParserUtils {
 
         while (matcher.find()) {
             String attribute = matcher.group(1);
-            String value = matcher.group(2) != null ? matcher.group(2) : matcher.group(3);
+            String value;
+            boolean quoted = false;
+            if(matcher.group(2) != null) {
+                value = matcher.group(2);
+                quoted = true;
+            } else
+                value = matcher.group(3);
 
             try {
                 if (attribute.startsWith("X-")) {
@@ -87,7 +93,8 @@ class ParserUtils {
                     Enum.valueOf(mapperClass, attribute.replace("-", "_")).read(builder, value);
                 }
             } catch (IllegalArgumentException e) {
-                throw new PlaylistParserException("Unknown attribute: " + attribute);
+                Z other = Enum.valueOf(mapperClass, "EXTENDED_ATTRIBUTE");
+                other.read(builder, attribute, value, quoted);
             }
         }
     }

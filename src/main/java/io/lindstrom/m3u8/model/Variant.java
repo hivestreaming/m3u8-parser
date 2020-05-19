@@ -1,7 +1,9 @@
 package io.lindstrom.m3u8.model;
 
+import io.lindstrom.m3u8.parser.ExtendedAttribute;
 import org.immutables.value.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,11 +91,15 @@ public interface Variant {
      */
     Optional<VideoRange> videoRange();
 
+    List<ExtendedAttribute> extendedAttributes();
+
     static Builder builder() {
         return new Builder();
     }
 
     class Builder extends VariantBuilder {
+        public List<ExtendedAttribute> extended = new ArrayList<>();
+
         public Builder resolution(int width, int height) {
             return resolution(Resolution.of(width, height));
         }
@@ -101,5 +107,6 @@ public interface Variant {
         public Builder videoRange(String value) {
             return videoRange(VideoRange.valueOf(value));
         }
+
     }
 }

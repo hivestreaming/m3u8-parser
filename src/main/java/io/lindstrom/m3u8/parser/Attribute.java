@@ -11,4 +11,8 @@ public interface Attribute<T, B> {
     default void read(B builder, String key, String value) {
         // no-op
     }
+
+    default void read(B builder, String key, String value, boolean quoted) {
+        // no-op
+    }
 }

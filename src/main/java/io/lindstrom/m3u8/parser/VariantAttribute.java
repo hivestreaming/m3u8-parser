@@ -163,6 +163,25 @@ enum VariantAttribute implements Attribute<Variant, Variant.Builder> {
         }
     },
 
+    EXTENDED_ATTRIBUTE {
+        @Override
+        public void read(Variant.Builder builder, String value){
+            //noop
+        }
+
+        @Override
+        public void read(Variant.Builder builder, String key, String value, boolean quoted) {
+            builder.extended.add(new ExtendedAttribute(key, value, quoted));
+            builder.extendedAttributes(builder.extended);
+        }
+
+        @Override
+        public void write(Variant value, TextBuilder textBuilder) {
+            if (value.extendedAttributes().size() > 0)
+               value.extendedAttributes().forEach(extendedAttribute -> extendedAttribute.write(textBuilder));
+        }
+    },
+
     URI {
         @Override
         public void read(Variant.Builder builder, String value) {

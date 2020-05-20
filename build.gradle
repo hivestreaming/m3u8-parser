@@ -63,11 +63,6 @@ publishing {
     repositories {
         maven {
             url 'https://pkgs.dev.azure.com/hivestreaming/client-team/_packaging/client-team/maven/v1'
-            credentials {
-                username "Azure DevOps Services"
-                //The Azure DevOps Services build system will use the "SYSTEM_ACCESSTOKEN" to authenticate to Azure DevOps Services feeds
-                password System.getenv("Azure DevOps Services_ENV_ACCESS_TOKEN") != null ? System.getenv("Azure DevOps Services_ENV_ACCESS_TOKEN") : vstsMavenAccessToken
-            }
         }
     }
 }

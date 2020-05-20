@@ -1,12 +1,12 @@
 package io.lindstrom.m3u8.parser;
 
 import io.lindstrom.m3u8.model.*;
-import io.lindstrom.m3u8.parser.MasterPlaylistParser;
 import org.junit.Test;
 
 import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MasterPlaylistParserTest {
     private final MasterPlaylistParser parser = new MasterPlaylistParser();
@@ -19,6 +19,12 @@ public class MasterPlaylistParserTest {
     @Test
     public void masterParser2() throws Exception {
         parser.readPlaylist(Paths.get("src/test/resources/master/apple-master.m3u8"));
+    }
+
+    @Test
+    public void masterParserWAMS() throws Exception {
+        MasterPlaylist parsed = parser.readPlaylist(Paths.get("src/test/resources/master/Manifest(format=m3u8-aapl-v3)"));
+        assertTrue(parsed.variants().stream().allMatch((variant) -> variant.uri().contains(",format=m3u8-aapl-v3")));
     }
 
     @Test

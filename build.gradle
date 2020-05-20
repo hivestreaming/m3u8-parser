@@ -1,10 +1,11 @@
 group 'io.lindstrom'
-version '0.11'
+version '0.12-build.1'
 
 apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: 'maven-publish'
 
 ext {
     ideaGeneratedSources = file('out/production/classes/generated')
@@ -40,54 +41,32 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
+//test {
+//    filter {
+//        includeTestsMatching "io.lindstrom.m3u8.parser.MasterPlaylistParserTest.masterParserWAMS"
+//    }
+//}
+
 archivesBaseName = "m3u8-parser"
 
-if (project.hasProperty('ossrhUsername')) {
-    signing {
-        sign configurations.archives
+publishing {
+    publications {
+        myPublication(MavenPublication) {
+            groupId group
+            artifactId 'm3u8-parser'
+            version version
+            artifact 'build/libs/m3u8-parser-' + version + ".jar"
+        }
     }
 
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
-                }
-
-                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                    authentication(userName: ossrhUsername, password: ossrhPassword)
-                }
-
-                pom.project {
-                    name 'm3u8-parser'
-                    packaging 'jar'
-                    artifactId 'm3u8-parser'
-                    description 'm3u8 parser'
-                    url 'https://github.com/carlanton/m3u8-parser'
-
-                    scm {
-                        connection 'scm:git:https://github.com/carlanton/m3u8-parser.git'
-                        developerConnection 'scm:git:git@github.com:carlanton/m3u8-parser.git'
-                        url 'https://github.com/carlanton/m3u8-parser.git'
-                    }
-
-                    licenses {
-                        license {
-                            name 'MIT License'
-                            url 'https://github.com/carlanton/m3u8-parser/blob/master/LICENSE'
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id 'antonlindstrom'
-                            name 'Anton Lindström'
-                            email 'carlantonlindstrom@gmail.com'
-                        }
-                    }
-                }
+    // Repositories *to* which Gradle can publish artifacts
+    repositories {
+        maven {
+            url 'https://pkgs.dev.azure.com/hivestreaming/client-team/_packaging/client-team/maven/v1'
+            credentials {
+                username "Azure DevOps Services"
+                //The Azure DevOps Services build system will use the "SYSTEM_ACCESSTOKEN" to authenticate to Azure DevOps Services feeds
+                password System.getenv("Azure DevOps Services_ENV_ACCESS_TOKEN") != null ? System.getenv("Azure DevOps Services_ENV_ACCESS_TOKEN") : vstsMavenAccessToken
             }
         }
     }

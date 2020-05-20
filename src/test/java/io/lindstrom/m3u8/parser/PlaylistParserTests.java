@@ -53,15 +53,26 @@ public class PlaylistParserTests {
                         .bandwidth(1280000)
                         .averageBandwidth(1000000)
                         .uri("http://example.com/low.m3u8")
+                        .extendedAttributes(new ArrayList<ExtendedAttribute>(
+                                Arrays.asList(
+                                        new ExtendedAttribute("NAME", "480", true),
+                                        new ExtendedAttribute("TEXT", "text", true),
+                                        new ExtendedAttribute("NUMBER", "2", false))))
                         .build(),
                 Variant.builder()
                         .bandwidth(2560000)
                         .averageBandwidth(2000000)
+                        .extendedAttributes(new ArrayList<ExtendedAttribute>(
+                                Arrays.asList(
+                                        new ExtendedAttribute("NAME", "720", true))))
                         .uri("http://example.com/mid.m3u8")
                         .build(),
                 Variant.builder()
                         .bandwidth(7680000)
                         .averageBandwidth(6000000)
+                        .extendedAttributes(new ArrayList<ExtendedAttribute>(
+                                Arrays.asList(
+                                        new ExtendedAttribute("NAME", "1080", true))))
                         .uri("http://example.com/hi.m3u8")
                         .build(),
                 Variant.builder()

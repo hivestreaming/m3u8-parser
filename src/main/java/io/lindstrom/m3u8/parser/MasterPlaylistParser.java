@@ -2,6 +2,9 @@ package io.lindstrom.m3u8.parser;
 
 import io.lindstrom.m3u8.model.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 /**
@@ -57,7 +60,13 @@ public class MasterPlaylistParser extends AbstractPlaylistParser<MasterPlaylist,
                 throw new PlaylistParserException("Expected URI, got " + uriLine);
             }
 
-            attributes += (attributes.isEmpty() ? "" : ",") + "URI=" + uriLine;
+            String uri = uriLine;
+            try {
+                uri = URLEncoder.encode(uriLine, StandardCharsets.UTF_8.toString());
+            } catch (UnsupportedEncodingException e) {
+               //
+            }
+            attributes += (attributes.isEmpty() ? "" : ",") + "URI=" + uri;
         }
 
         tag.read(builder, attributes);

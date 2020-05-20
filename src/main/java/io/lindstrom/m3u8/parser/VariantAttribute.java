@@ -2,6 +2,10 @@ package io.lindstrom.m3u8.parser;
 
 import io.lindstrom.m3u8.model.Variant;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 /*
  * #EXT-X-STREAM-INF:<attribute-list>
  */
@@ -163,10 +167,33 @@ enum VariantAttribute implements Attribute<Variant, Variant.Builder> {
         }
     },
 
+    EXTENDED_ATTRIBUTE {
+        @Override
+        public void read(Variant.Builder builder, String value){
+            //noop
+        }
+
+        @Override
+        public void read(Variant.Builder builder, String key, String value, boolean quoted) {
+            builder.extended.add(new ExtendedAttribute(key, value, quoted));
+            builder.extendedAttributes(builder.extended);
+        }
+
+        @Override
+        public void write(Variant value, TextBuilder textBuilder) {
+            if (value.extendedAttributes().size() > 0)
+               value.extendedAttributes().forEach(extendedAttribute -> extendedAttribute.write(textBuilder));
+        }
+    },
+
     URI {
         @Override
         public void read(Variant.Builder builder, String value) {
-            builder.uri(value);
+            try {
+                builder.uri(URLDecoder.decode(value, StandardCharsets.UTF_8.toString()));
+            } catch (UnsupportedEncodingException e) {
+                builder.uri(value);
+            }
         }
 
         @Override

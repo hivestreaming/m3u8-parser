@@ -63,6 +63,9 @@ publishing {
     repositories {
         maven {
             url 'https://pkgs.dev.azure.com/hivestreaming/client-team/_packaging/client-team/maven/v1'
+            authentication {
+                basic(BasicAuthentication)
+            }
         }
     }
 }

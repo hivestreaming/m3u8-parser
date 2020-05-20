@@ -1,5 +1,5 @@
 group 'io.lindstrom'
-version '0.12-hive'
+version '0.12-build.1'
 
 apply plugin: 'idea'
 apply plugin: 'java'
@@ -41,6 +41,12 @@ artifacts {
     archives javadocJar, sourcesJar
 }
 
+//test {
+//    filter {
+//        includeTestsMatching "io.lindstrom.m3u8.parser.MasterPlaylistParserTest.masterParserWAMS"
+//    }
+//}
+
 archivesBaseName = "m3u8-parser"
 
 publishing {
@@ -56,7 +62,7 @@ publishing {
     // Repositories *to* which Gradle can publish artifacts
     repositories {
         maven {
-            url 'https://pkgs.dev.azure.com/hivestreaming/_packaging/client-team-test/maven/v1'
+            url 'https://pkgs.dev.azure.com/hivestreaming/client-team/_packaging/client-team/maven/v1'
             credentials {
                 username "Azure DevOps Services"
                 //The Azure DevOps Services build system will use the "SYSTEM_ACCESSTOKEN" to authenticate to Azure DevOps Services feeds

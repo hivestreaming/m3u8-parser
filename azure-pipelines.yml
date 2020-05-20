@@ -3,9 +3,9 @@ pool:
 
 steps:
   - task: MavenAuthenticate@0
-      displayName: 'Maven Authenticate'
-      inputs:
-        artifactsFeeds: client-team
+    displayName: 'Maven Authenticate'
+    inputs:
+      artifactsFeeds: client-team
   - task: Gradle@2
     inputs:
       workingDirectory: ''
